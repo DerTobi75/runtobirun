@@ -3,9 +3,10 @@
 require_once 'vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Filesystem\Filesystem;
+
+$fs = new Filesystem();
 
 $request = Request::createFromGlobals();
 
@@ -14,16 +15,13 @@ $output = array('uploaded' => false);
 $file = $request->files->get('file');
 $fileName = $file->getClientOriginalName();
 
-// generate a new filename (safer, better approach)
-// $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
 // set your uploads directory
 $uploadDir = "fit/new";
 
-// Better learn to use Symfony Finder or Filesystem instead
-if (!file_exists($uploadDir) && !is_dir($uploadDir)) {
-    mkdir($uploadDir, 0775, true);
+if(!$fs->exists($uploadDir)) {
+    $fs->mkdir($uploadDir);
 }
+
 if ($file->move($uploadDir, $fileName)) {
     $output['uploaded'] = true;
     $output['fileName'] = $fileName;
