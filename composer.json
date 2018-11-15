@@ -1,6 +1,7 @@
 {
     "require": {
         "twig/twig": "^2.0",
-        "symfony/http-foundation": "^4.1"
+        "symfony/http-foundation": "^4.1",
+        "adriangibbons/php-fit-file-analysis": "^3.2"
     }
 }

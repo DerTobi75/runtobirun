@@ -3,7 +3,58 @@
 {% block uploadContainer %}
 <div class="row">
     <div class="col-sm">
-        One of three columns
+        <h1 class="col-sm-offset-3">File Upload in Symfony using Dropzone</h1><hr>
+        <form>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="">Default Image</label>
+            <div class="col-sm-10">
+                <div class="dropzone"></div>
+            </div>
+        </div>
+        <!-- <div class="col-xs-4 pull-right">
+            <input type="submit" class="btn btn-block btn-primary" value="Add" />
+        </div> -->
+        </form>
     </div>
 </div>
-{% endblock %}
+<div class="row">
+    <div class="col-sm">
+        <table>
+            <table id="fitFiles" class="table table-bordered"></table>
+        </table>
+    </div>
+</div>
+{% endblock uploadContainer %}
+{% block styleSheets %}
+    <link rel="stylesheet" href="css/dropzone.css">
+{% endblock styleSheets %}
+{% block javaScripts %}
+    <script src="js/dropzone.js"></script>
+
+    <script>
+        // init,configure dropzone
+        Dropzone.autoDiscover = false;
+        var dropzone_default = new Dropzone(".dropzone", {
+            url: 'getFit.php',
+            maxFiles: 1,
+            dictMaxFilesExceeded: 'Only 1 FitFile can be uploaded',
+            acceptedFiles: '.fit',
+            maxFilesize: 3,  // in Mb
+            addRemoveLinks: true,
+            init: function () {
+                this.on("maxfilesexceeded", function(file) {
+                    this.removeFile(file);
+                });
+                this.on("sending", function(file, xhr, formData) {
+                    // send additional data with the file as POST data if needed.
+                    // formData.append("key", "value");
+                });
+                this.on("success", function(file, response) {
+                    if (response.uploaded) {
+                        $("#fitFiles").append("<tr><td>" + response.datum + "</td><td>" + response.laenge + " km</td><td>" + response.dauer + "</td><td>" + response.filename + "</td></tr>");
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock javaScripts %}
