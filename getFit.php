@@ -28,13 +28,16 @@ if ($file->move($uploadDir, $fileName)) {
 }
 
 // This is just a fast workaound, need to add if Statement
-$pFFA = new adriangibbons\phpFITFileAnalysis('fit/new/' . $fileName);
+if($fs->exists($uploadDir . "/" . $fileName)) {
+    $pFFA = new adriangibbons\phpFITFileAnalysis('fit/new/' . $fileName);
 
-$output['datum'] = date('d.m.Y',$pFFA->data_mesgs['session']['start_time']);
-$output['laenge'] = $pFFA->data_mesgs['session']['total_distance'];
-$output['dauer'] = $pFFA->data_mesgs['session']['total_timer_time'];
-$output['filename'] = $fileName;
-
+    $output['datum'] = date('d.m.Y', $pFFA->data_mesgs['session']['start_time']);
+    $output['laenge'] = $pFFA->data_mesgs['session']['total_distance'];
+    $output['dauer'] = $pFFA->data_mesgs['session']['total_timer_time'];
+    $output['filename'] = $fileName;
+} else {
+    $output['uploaded'] = false;
+}
 
 $response = new JsonResponse($output);
 $response->send();
