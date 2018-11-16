@@ -10,6 +10,7 @@ require_once 'myStuff.php';
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 $fs = new Filesystem();
 
@@ -79,13 +80,19 @@ if($fs->exists($uploadDir . "/" . $fileName)) {
 
     } else {
         // This must be another Error Message, like Fit File cannot be read, ...
-        $output['uploaded'] ='ERROR';
+        $output['uploaded'] = 'ERROR';
         $output['filename'] = $fileName;
     }
 
 
 } else {
     $output['uploaded'] = 'ERROR';
+}
+
+if($output['uploaded'] == 'OK') {
+    // And now move the file to the "Done" folder
+
+    $fs->rename($uploadDir . "/" . $fileName, 'fit/done/' . $fileName);
 }
 
 $response = new JsonResponse($output);
