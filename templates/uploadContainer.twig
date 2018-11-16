@@ -50,8 +50,10 @@
                     // formData.append("key", "value");
                 });
                 this.on("success", function(file, response) {
-                    if (response.uploaded) {
-                        $("#fitFiles").append("<tr><td>" + response.datum + "</td><td>" + response.laenge + " km</td><td>" + response.dauer + "</td><td>" + response.filename + "</td></tr>");
+                    if (response.uploaded == 'OK') {
+                        $("#fitFiles").append("<tr><td>" + response.uploaded + "</td><td>" + response.laenge + " km</td><td>" + response.dauer + "</td><td>" + response.filename + "</td></tr>");
+                    } else {
+                        alert('Error' + response.filename);
                     }
                 });
             }
