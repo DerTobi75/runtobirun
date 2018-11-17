@@ -1,3 +1,5 @@
 <?php
-/* Das ist ein Test */
-echo "Hello World";
+
+require 'vendor/autoload.php';
+
+use Carbon\Carbon;

@@ -4,6 +4,7 @@
         "symfony/http-foundation": "^4.1",
         "adriangibbons/php-fit-file-analysis": "^3.2",
         "symfony/finder": "^4.1",
-        "symfony/filesystem": "^4.1"
+        "symfony/filesystem": "^4.1",
+        "nesbot/carbon": "^2.5"
     }
 }
