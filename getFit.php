@@ -1,8 +1,6 @@
 <?php
 
-## ToDo: Simple Logfile Integration
 ## ToDo: Better Error Handling on Upload and Process
-
 
 require_once 'vendor/autoload.php';
 require_once 'myStuff.php';
@@ -10,7 +8,7 @@ require_once 'myStuff.php';
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 $fs = new Filesystem();
 
@@ -31,9 +29,14 @@ if(!$fs->exists($uploadDir)) {
 if ($file->move($uploadDir, $fileName)) {
     $output['uploaded'] = 'OK';
     $output['fileName'] = $fileName;
+
+    $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " moved to fit/new.\n";
+    $fs->appendToFile($fitLogfile, $logLine);
+} else {
+    $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " CANNOT be moved to fit/new.\n";
+    $fs->appendToFile($fitLogfile, $logLine);
 }
 
-// This is just a fast workaound, need to add if Statement
 if($fs->exists($uploadDir . "/" . $fileName)) {
 
     // Build a better PDO SQL Query
@@ -41,7 +44,8 @@ if($fs->exists($uploadDir . "/" . $fileName)) {
     $checkfile = $pdo->query($sql);
 
     if ($checkfile->rowCount() == 0) {
-
+        $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " is new. Try to get information from it.\n";
+        $fs->appendToFile($fitLogfile, $logLine);
         $qInsertLauf = $pdo->prepare("INSERT INTO `laeufe` (`lauf_name`, `lauf_datum`, `lauf_laenge`, `lauf_dauer`, `lauf_fitfile`) 
                                         VALUES (:lauf, :datum, :laenge, :dauer, :filename)");
 
@@ -67,32 +71,35 @@ if($fs->exists($uploadDir . "/" . $fileName)) {
         // Make Date Output nice
         $output['datum'] = date('d.m.Y', $output['datum']);
 
-        /*echo "<pre>";
-        print_r($inDB);
         $qInsertLauf->execute($inDB);
-        if ( $pdo->lastInsertId() > 0 ) {
-            rename($fitfile->getRealPath(), 'fit/done/' . $fitfile->getFilename());
+
+        if($pdo->lastInsertId() > 0) {
+            $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " information read, insert into Database, ID: " . $pdo->lastInsertId() . "\n";
+            $fs->appendToFile($fitLogfile, $logLine);
+
+            // And now move the file to the "Done" folder
+            try {
+                $fs->rename($uploadDir . "/" . $fileName, 'fit/done/' . $fileName);
+                $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " moved to fit/done.\n\n";
+                $fs->appendToFile($fitLogfile, $logLine);
+            } catch (IOExceptionInterface $exception) {
+                $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " CANNOT be moved to fit/done.\n\n";
+                $fs->appendToFile($fitLogfile, $logLine);
+            }
         }
-
-        echo "</pre>"; */
-        $qInsertLauf->execute($inDB);
-
-
     } else {
         // This must be another Error Message, like Fit File cannot be read, ...
         $output['uploaded'] = 'ERROR';
         $output['filename'] = $fileName;
+        $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " seems already to be in the Database. File is possibly not deleted yet!\n\n";
+        $fs->appendToFile($fitLogfile, $logLine);
     }
 
 
 } else {
     $output['uploaded'] = 'ERROR';
-}
-
-if($output['uploaded'] == 'OK') {
-    // And now move the file to the "Done" folder
-
-    $fs->rename($uploadDir . "/" . $fileName, 'fit/done/' . $fileName);
+    $logLine = date('d.m.Y H:i:s') . " - File: " . $fileName . " does NOT exist.\n\n";
+    $fs->appendToFile($fitLogfile, $logLine);
 }
 
 $response = new JsonResponse($output);
