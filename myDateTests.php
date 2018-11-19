@@ -30,22 +30,16 @@ for($i = $immutable->firstOfYear(); $i <= $immutable->lastOfYear(); $i = $i->add
         if($i->month > 1) {
             echo "<br />";
         }
-        echo $i->monthName . "<br />" . $i . "<br />";
+        echo $i->monthName . "<br />" . $i->format('d.m.Y') . " (" . $i->dayOfYear. ")<br />";
     } else {
-        echo $i . "<br />";
+        echo $i->format('d.m.Y') . " (" . $i->dayOfYear. ")<br />";
     }
+
+
 }
 
 $tester = $immutable->firstOfYear();
 echo $tester->addDay(3) . "<br /><br />";
-
-if($immutable->firstOfYear() > $tester->addDay(7)) {
-    echo "Klappt, ...<br />";
-} else {
-    echo "Klappt nicht!<br />";
-}
-
-
 
 echo $mutable->firstOfYear() . "<br />";
 echo $mutable->lastOfYear() . "<br />";
