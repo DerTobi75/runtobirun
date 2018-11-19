@@ -26,7 +26,7 @@ echo $firstDay->addDay(1) . "<br />";
 
 for($i = $immutable->firstOfYear(); $i <= $immutable->lastOfYear(); $i = $i->addDay(1)) {
 
-    if($i == $i->firstOfMonth()) {
+    if($i->eq($i->firstOfMonth())) {
         if($i->month > 1) {
             echo "<br />";
         }
