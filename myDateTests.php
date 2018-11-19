@@ -24,6 +24,9 @@ echo $firstDay->addDay(1) . "<br />";
 
 
 
+echo "Current Week Of Year: " . $immutable->weekOfYear . "<br />";
+echo $immutable->week(44)->startOfWeek() . "<br />";
+
 for($i = $immutable->firstOfYear(); $i <= $immutable->lastOfYear(); $i = $i->addDay(1)) {
 
     if($i->eq($i->firstOfMonth())) {
