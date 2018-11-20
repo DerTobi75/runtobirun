@@ -4,9 +4,29 @@ require 'vendor/autoload.php';
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::createFromGlobals();
 
 $immutable = CarbonImmutable::now();
 $mutable = Carbon::now();
+
+
+$yearsInStats = array('2018', '2019');
+if(!empty($request->query->get('jahr')) AND in_array($request->query->get('jahr'), $yearsInStats)) {
+    $jahr = $request->query->get('jahr');
+} else {
+    $jahr = $immutable->year;
+}
+
+if(!empty($request->query->get('monat')) AND ($request->query->get('monat') > 0 AND $request->query->get('monat') < 13)) {
+    $monat = $request->query->get('monat');
+} else {
+    $monat = $immutable->month;
+}
+
+echo "Jahr: " . $jahr . "<br />";
+echo "Monat: " . $monat . "<br />";
 
 echo "<pre>";
     var_dump($immutable);
@@ -22,6 +42,13 @@ echo "Erster Tag des Jahres: " . $firstDay . "<br />";
 
 echo $firstDay->addDay(1) . "<br />";
 
+$yearDays = $immutable->daysInYear;
+$today = $immutable->dayOfYear;
+
+$restDays = $yearDays - $today;
+echo $restDays . "<br />";
+
+echo $yearDays . " " . $today . "<br />";
 
 
 echo "Current Week Of Year: " . $immutable->weekOfYear . "<br />";
