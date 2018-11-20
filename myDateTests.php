@@ -33,9 +33,19 @@ for($i = $immutable->firstOfYear(); $i <= $immutable->lastOfYear(); $i = $i->add
         if($i->month > 1) {
             echo "<br />";
         }
-        echo $i->monthName . "<br />" . $i->format('d.m.Y') . " (" . $i->dayOfYear. ")<br />";
+        echo $i->monthName . "<br />";
+        if($i->eq($i->isWeekend())) {
+            echo "<b>" . $i->format('d.m.Y') . " (" . $i->dayOfYear . " / " . $i->weekOfYear . ")</b><br />";
+        } else {
+            echo $i->format('d.m.Y') . " (" . $i->dayOfYear . " / " . $i->weekOfYear . ")<br />";
+        }
+
     } else {
-        echo $i->format('d.m.Y') . " (" . $i->dayOfYear. ")<br />";
+        if($i->eq($i->isWeekend())) {
+            echo "<b>" . $i->dayOfWeekIso . " - " . $i->format('d.m.Y') . " (" . $i->dayOfYear . " / " . $i->weekOfYear . ")</b><br />";
+        } else {
+            echo $i->format('d.m.Y') . " (" . $i->dayOfYear . " / " . $i->weekOfYear . ")<br />";
+        }
     }
 
 
