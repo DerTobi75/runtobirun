@@ -36,6 +36,7 @@ if(!empty($request->query->get('monat')) AND ($request->query->get('monat') > 0 
 } else {
     $monat = $immutable->month;
 }
+$stopwatch->lap("eventName");
 
 echo "Jahr: " . $jahr . "<br />";
 echo "Monat: " . $monat . "<br />";
@@ -91,9 +92,14 @@ for($i = $immutable->firstOfYear(); $i <= $immutable->lastOfYear(); $i = $i->add
 $tester = $immutable->firstOfYear();
 echo $tester->addDay(3) . "<br /><br />";
 
+sleep(10);
+
 echo $mutable->firstOfYear() . "<br />";
 echo $mutable->lastOfYear() . "<br />";
 
 $event = $stopwatch->stop('eventName');
 
-echo "<br /><br />Ende! " . $event->getDuration();
+
+$tester = Carbon::createFromTimestampMs($event->getOrigin());
+echo "Urghs: " . $tester . "<br />";
+echo "<br /><br />Ende! " . $event->getOrigin() . " " . $event->getDuration() . " " . $event->getStartTime() . " " . $event->getEndTime();
