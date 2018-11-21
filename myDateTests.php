@@ -2,6 +2,12 @@
 
 require 'vendor/autoload.php';
 
+use Symfony\Component\Stopwatch\Stopwatch;
+
+$stopwatch = new Stopwatch();
+// starts event named 'eventName'
+$stopwatch->start('eventName');
+
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +16,12 @@ $request = Request::createFromGlobals();
 
 $immutable = CarbonImmutable::now();
 $mutable = Carbon::now();
+
+
+
+echo "Tage bis Ende des Jahres: " . $immutable->diffInDays($immutable->lastOfYear()) . "<br />";
+echo "Tage bis Ende des Monats: " . $immutable->diffInDays($immutable->lastOfMonth()) . "<br />";
+echo "Tage vom 1.11. bis Ende des Jahres: " . $immutable->firstOfMonth()->diffInDays($immutable->lastOfYear()) . "<br />";
 
 
 $yearsInStats = array('2018', '2019');
@@ -84,4 +96,6 @@ echo $tester->addDay(3) . "<br /><br />";
 echo $mutable->firstOfYear() . "<br />";
 echo $mutable->lastOfYear() . "<br />";
 
-echo "<br /><br />Ende!";
+$event = $stopwatch->stop('eventName');
+
+echo "<br /><br />Ende! " . $event->getDuration();
