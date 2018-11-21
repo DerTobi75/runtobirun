@@ -40,16 +40,15 @@ if(!empty($request->query->get('monat')) AND ($request->query->get('monat') > 0 
 echo "Jahr: " . $jahr . "<br />";
 echo "Monat: " . $monat . "<br />";
 
-echo "<pre>";
+/*echo "<pre>";
     var_dump($immutable);
-echo "</pre>";
+echo "</pre>";*/
 
 $jahr = $immutable->year;
 
 $firstDay = $immutable->firstOfYear();
 
 echo "Das aktuelle Jahr: " . $jahr . "<br />";
-
 echo "Erster Tag des Jahres: " . $firstDay . "<br />";
 
 echo $firstDay->addDay(1) . "<br />";
@@ -59,7 +58,6 @@ $today = $immutable->dayOfYear;
 
 $restDays = $yearDays - $today;
 echo $restDays . "<br />";
-
 echo $yearDays . " " . $today . "<br />";
 
 
