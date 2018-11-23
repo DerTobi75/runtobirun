@@ -102,4 +102,4 @@ $event = $stopwatch->stop('eventName');
 
 $tester = Carbon::createFromTimestampMs($event->getOrigin());
 echo "Urghs: " . $tester . "<br />";
-echo "<br /><br />Ende! " . $event->getOrigin() . " " . $event->getDuration() . " " . $event->getStartTime() . " " . $event->getEndTime();
+echo "<br /><br />Ende! " . $event->getOrigin() / 1000 . " " . $event->getDuration() / 1000  . " Sekunden " . $event->getStartTime() . " " . $event->getEndTime();
