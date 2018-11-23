@@ -13,14 +13,6 @@ $run_year = '2018';
 $immutable = CarbonImmutable::createFromDate($run_year, 1, 1);
 $period = CarbonPeriod::create($immutable->firstOfYear(), $immutable);
 
-// Iterate over the period
-/*foreach ($period as $date) {
-    if ($date)
-    echo $date->format('Y-m-d') . "<br />";
-}
-
-die();*/
-
 $qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year");
 
 try {
@@ -53,9 +45,5 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
         echo "Hier: " . $dailyRuns[$i->dayOfYear]['run_id'] . "<br />";
     }
 }
-
-/*echo "<pre>";
-    print_r($dailyRuns);
-echo "</pre>";*/
 
 echo "Ende!";
