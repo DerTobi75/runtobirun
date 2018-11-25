@@ -33,16 +33,44 @@ foreach($qSelect->fetchAll() AS $runs) {
         'run_file' => $runs['lauf_fitfile'],
     );
 
-    echo $runs['lauf_id'] . " ";
-
-    echo $run_day . "<br />";
+    // echo $runs['lauf_id'] . " ";
+    // echo $run_day . "<br />";
 }
 
 
+$totalKM = 0;
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
     if (isset($dailyRuns[$i->dayOfYear])) {
-        echo "Hier: " . $dailyRuns[$i->dayOfYear]['run_id'] . "<br />";
+        $totalKM += $dailyRuns[$i->dayOfYear]['run_distance'];
+        if (isset($noRunningCounter)) {
+           unset($noRunningCounter);
+        }
+
+        if(!isset($streakCounter)) {
+            $streakCounter = 1;
+        } else {
+            $streakCounter++;
+        }
+
+        echo $i->dayOfYear . " ";
+        echo "Hier: " . $dailyRuns[$i->dayOfYear]['run_distance'] . " Total: " .  $totalKM ."km <b>Streak:</b> " . $streakCounter . "<br />";
+
+        // Small Idea
+        // Period of Streak / No Running!
+
+    } else {
+        if(isset($streakCounter)) {
+            unset($streakCounter);
+        }
+
+        if(!isset($noRunningCounter)) {
+            $noRunningCounter = 1;
+        } else {
+            $noRunningCounter++;
+        }
+
+        echo $i->dayOfYear . " no Run for " . $noRunningCounter . " day(s).<br />";
     }
 }
 
