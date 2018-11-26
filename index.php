@@ -39,12 +39,18 @@ foreach($qSelect->fetchAll() AS $runs) {
 
 
 $totalKM = 0;
+$records['streak'] = 0;
+$records['noRunning'] = 0;
+
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
     if (isset($dailyRuns[$i->dayOfYear])) {
         $totalKM += $dailyRuns[$i->dayOfYear]['run_distance'];
         if (isset($noRunningCounter)) {
-           unset($noRunningCounter);
+            if($noRunningCounter > $records['noRunning']) {
+                $records['noRunning'] = $noRunningCounter;
+            }
+            unset($noRunningCounter);
         }
 
         if(!isset($streakCounter)) {
@@ -61,6 +67,9 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
     } else {
         if(isset($streakCounter)) {
+            if($streakCounter > $records['streak']) {
+                $records['streak'] = $streakCounter;
+            }
             unset($streakCounter);
         }
 
@@ -74,4 +83,6 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     }
 }
 
+echo "Streak Record: " . $records['streak'] . " Days<br />";
+echo "NoRunning Record: " . $records['noRunning'] . " Days<br />";
 echo "Ende!";
