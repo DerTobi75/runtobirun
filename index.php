@@ -1,5 +1,7 @@
 <?php
 
+// kmToGoal = how many km to run to reach the yearly goal
+
 require 'vendor/autoload.php';
 require_once 'myStuff.php';
 
@@ -34,7 +36,7 @@ foreach($qSelect->fetchAll() AS $runs) {
     $run_day = Carbon::createFromTimestamp($runs['lauf_datum'])->dayOfYear;
     $dailyRuns[$run_day] = array(
         'run_id' => $runs['lauf_id'],
-        'run_date' => $runs['lauf_datum'],
+        'run_date' => date('d.m.y', $runs['lauf_datum']),
         'run_distance' => $runs['lauf_laenge'],
         'run_duration' => $runs['lauf_dauer'],
         'run_file' => $runs['lauf_fitfile'],
@@ -44,13 +46,18 @@ foreach($qSelect->fetchAll() AS $runs) {
 
 
 $totalKM = 0;
+// ToDo: get yearlyGoal from the database or set it elsewhere,
+// ToDo: but do not let it be static!
+$yearlyGoal = 2018;
 $records['streak'] = 0;
 $records['noRunning'] = 0;
+
 
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
     if (isset($dailyRuns[$i->dayOfYear])) {
         $totalKM += $dailyRuns[$i->dayOfYear]['run_distance'];
+        $KMtoGo = $yearlyGoal - $totalKM;
         if (isset($noRunningCounter)) {
             if($noRunningCounter > $records['noRunning']) {
                 $records['noRunning'] = $noRunningCounter;
@@ -71,7 +78,10 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
         // Period of Streak / No Running!
 
     } else {
+        // we need a date for the table
+        $dailyRuns[$i->dayOfYear]['run_date'] = $i->format('d.m.y');
         if(isset($streakCounter)) {
+
             if($streakCounter > $records['streak']) {
                 $records['streak'] = $streakCounter;
             }
@@ -86,10 +96,21 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
         // echo $i->dayOfYear . " no Run for " . $noRunningCounter . " day(s).<br />";
     }
+
+    // do not know if this is the best place
+    // data the array needs, that can be generated
+    // in if OR else, ...
+    $dailyRuns[$i->dayOfYear]['run_day'] = $i->dayOfYear;
+    $dailyRuns[$i->dayOfYear]['totalKM'] = $totalKM;
+    $dailyRuns[$i->dayOfYear]['KMtoGo'] = $KMtoGo;
+
 }
 
 // echo "Streak Record: " . $records['streak'] . " Days<br />";
 // echo "NoRunning Record: " . $records['noRunning'] . " Days<br />";
 // echo "Ende!";
 
-echo $twig->render('runtable.twig', array());
+
+// sort the dailyRun Array
+ksort($dailyRuns);
+echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns));

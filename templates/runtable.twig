@@ -5,7 +5,13 @@
     <table>
         <thead></thead>
         <tbody>
-
+            {% for run in myRuns %}
+                <tr>
+                    <td>{{ run.run_date }} <small>({{ run.run_day }})</small></td>
+                    <td align="right">{{ run.KMtoGo|number_format(2, ',', '.') }}</td>
+                    <td align="right">{{ run.totalKM|number_format(2, ',', '.') }} km</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock content %}
