@@ -92,8 +92,6 @@ for($i = $immutable->firstOfYear(); $i <= $immutable->lastOfYear(); $i = $i->add
 $tester = $immutable->firstOfYear();
 echo $tester->addDay(3) . "<br /><br />";
 
-sleep(10);
-
 echo $mutable->firstOfYear() . "<br />";
 echo $mutable->lastOfYear() . "<br />";
 

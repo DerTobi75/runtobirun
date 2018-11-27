@@ -7,6 +7,13 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 
+$loader = new Twig_Loader_Filesystem('templates');
+$twig = new Twig_Environment($loader, array(
+    'cache' => false,
+    'debug' => true,
+));
+$twig->addExtension(new Twig_Extension_Debug());
+
 // ToDo:
 // Need to get year and month from URL
 $run_year = '2018';
@@ -18,10 +25,10 @@ $qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum
 try {
     $qSelect->execute(array('run_year' => $run_year));
 } catch (PDOException $e) {
-    echo $e->getMessage();
+    // echo $e->getMessage();
 }
 
-echo "Zeilen: " . $qSelect->rowCount() . "<br />";
+// echo "Zeilen: " . $qSelect->rowCount() . "<br />";
 foreach($qSelect->fetchAll() AS $runs) {
 
     $run_day = Carbon::createFromTimestamp($runs['lauf_datum'])->dayOfYear;
@@ -33,8 +40,6 @@ foreach($qSelect->fetchAll() AS $runs) {
         'run_file' => $runs['lauf_fitfile'],
     );
 
-    // echo $runs['lauf_id'] . " ";
-    // echo $run_day . "<br />";
 }
 
 
@@ -59,8 +64,8 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
             $streakCounter++;
         }
 
-        echo $i->dayOfYear . " ";
-        echo "Hier: " . $dailyRuns[$i->dayOfYear]['run_distance'] . " Total: " .  $totalKM ."km <b>Streak:</b> " . $streakCounter . "<br />";
+        // echo $i->dayOfYear . " ";
+        // echo "Hier: " . $dailyRuns[$i->dayOfYear]['run_distance'] . " Total: " .  $totalKM ."km <b>Streak:</b> " . $streakCounter . "<br />";
 
         // Small Idea
         // Period of Streak / No Running!
@@ -79,10 +84,12 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
             $noRunningCounter++;
         }
 
-        echo $i->dayOfYear . " no Run for " . $noRunningCounter . " day(s).<br />";
+        // echo $i->dayOfYear . " no Run for " . $noRunningCounter . " day(s).<br />";
     }
 }
 
-echo "Streak Record: " . $records['streak'] . " Days<br />";
-echo "NoRunning Record: " . $records['noRunning'] . " Days<br />";
-echo "Ende!";
+// echo "Streak Record: " . $records['streak'] . " Days<br />";
+// echo "NoRunning Record: " . $records['noRunning'] . " Days<br />";
+// echo "Ende!";
+
+echo $twig->render('runtable.twig', array());
