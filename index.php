@@ -1,7 +1,7 @@
 <?php
 
-// kmToGoal = how many km to run to reach the yearly goal
-
+// KMToGoal = how many km to run to reach the yearly goal
+// pTotalKMToGoal = p means perfect, how many is milage I had to run, meeting my goal
 require 'vendor/autoload.php';
 require_once 'myStuff.php';
 
@@ -46,15 +46,17 @@ foreach($qSelect->fetchAll() AS $runs) {
 
 
 $totalKM = 0;
+$totalGoalKM = 0;
 // ToDo: get yearlyGoal from the database or set it elsewhere,
 // ToDo: but do not let it be static!
 $yearlyGoal = 2018;
+$dailyGoalKM = $yearlyGoal / 365;
 $records['streak'] = 0;
 $records['noRunning'] = 0;
 
 
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
-
+    $totalGoalKM += round($dailyGoalKM, 2);
     if (isset($dailyRuns[$i->dayOfYear])) {
         $totalKM += $dailyRuns[$i->dayOfYear]['run_distance'];
         $KMtoGo = $yearlyGoal - $totalKM;
@@ -102,7 +104,9 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     // in if OR else, ...
     $dailyRuns[$i->dayOfYear]['run_day'] = $i->dayOfYear;
     $dailyRuns[$i->dayOfYear]['totalKM'] = $totalKM;
+    $dailyRuns[$i->dayOfYear]['totalGoalKM'] = $totalGoalKM;
     $dailyRuns[$i->dayOfYear]['KMtoGo'] = $KMtoGo;
+
 
 }
 

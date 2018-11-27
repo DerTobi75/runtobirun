@@ -2,12 +2,14 @@
 
 {% block content %}
     <strong>Running in 2018</strong>
-    <table>
+    <table class="table table-bordered">
         <thead></thead>
         <tbody>
             {% for run in myRuns %}
-                <tr>
+                <tr{% if not run.run_distance %} class="table-secondary text-muted"{% endif %}>
                     <td>{{ run.run_date }} <small>({{ run.run_day }})</small></td>
+                    <td align="right">{% if run.run_distance %}{{ run.run_distance }} km {% else %}&nbsp;{% endif %}</td>
+                    <td align="right">{{ run.totalGoalKM|number_format(2, ',', '.') }} km</td>
                     <td align="right">{{ run.KMtoGo|number_format(2, ',', '.') }}</td>
                     <td align="right">{{ run.totalKM|number_format(2, ',', '.') }} km</td>
                 </tr>
