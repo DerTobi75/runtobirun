@@ -60,6 +60,11 @@ $records['noRunning'] = 0;
 
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $totalGoalKM += round($dailyGoalKM, 2);
+
+    if(!isset($avgDailyKM) AND $i->eq($i->firstOfYear())) {
+        $avgDailyKM = $yearlyGoal / $i->daysInYear;
+    }
+
     if (isset($dailyRuns[$i->dayOfYear])) {
         $totalKM += $dailyRuns[$i->dayOfYear]['run_distance'];
         $KMtoGo = $yearlyGoal - $totalKM;
@@ -105,6 +110,10 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $dailyRuns[$i->dayOfYear]['totalGoalKM'] = $totalGoalKM;
     $dailyRuns[$i->dayOfYear]['KMtoGo'] = $KMtoGo;
     $dailyRuns[$i->dayOfYear]['diffToGoal'] = $dailyRuns[$i->dayOfYear]['totalGoalKM'] - $dailyRuns[$i->dayOfYear]['totalKM'];
+    $dailyRuns[$i->dayOfYear]['avgDailyKM'] = round($avgDailyKM, 2);
+
+    // data we need in the next round!
+    $avgDailyKM = $KMtoGo / $i->diffInDays($i->lastOfYear());
 
 
 }
