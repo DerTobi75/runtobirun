@@ -6,14 +6,15 @@
         <thead></thead>
         <tbody>
             {% for run in myRuns %}
-                <tr{% if not run.run_distance %} class="table-secondary text-muted"{% endif %}>
+                <tr{% if not run.run_distance %} class="table-light text-muted"{% endif %}>
                     <td>{{ run.run_date }} <small>({{ run.run_day }})</small></td>
-                    <td align="right">{% if run.run_distance %}{{ run.run_distance }} km {% else %}&nbsp;{% endif %}</td>
+                    <td align="right"{% if run.run_distance %} {% if run.run_distance > run.avgDailyToGoKM %}class="text-success"{% else %}class="text-danger"{% endif %}>{{ run.run_distance }} km {% else %}>&nbsp;{% endif %}</td>
+                    <td align="right">{{ run.avgDailyToGoKM|number_format(2, ',', '.') }} km</td>
                     <td align="right">{{ run.totalKM|number_format(2, ',', '.') }} km</td>
-                    <td align="right">{{ run.avgDailyKM|number_format(2, ',', '.') }} km</td>
                     <td align="right">{{ run.KMtoGo|number_format(2, ',', '.') }}</td>
                     <td align="right">{{ run.totalGoalKM|number_format(2, ',', '.') }} km</td>
-                    <td align="right" class="{% if run.diffToGoal < 0 %}text-success{% else %}text-danger{% endif %}">{{ run.diffToGoal|number_format(2) }} km</td>
+                    <td align="right" class="{% if run.diffToGoal > 0 %}text-success{% else %}text-danger{% endif %}">{{ run.diffToGoal|number_format(2) }} km</td>
+                    <td align="right">{{ run.avgDailyRunKM|number_format(2, ',', '.') }} km</td>
                 </tr>
             {% endfor %}
         </tbody>

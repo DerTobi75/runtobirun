@@ -61,8 +61,8 @@ $records['noRunning'] = 0;
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $totalGoalKM += round($dailyGoalKM, 2);
 
-    if(!isset($avgDailyKM) AND $i->eq($i->firstOfYear())) {
-        $avgDailyKM = $yearlyGoal / $i->daysInYear;
+    if(!isset($avgDailyToGoKM) AND $i->eq($i->firstOfYear())) {
+        $avgDailyToGoKM = $yearlyGoal / $i->daysInYear;
     }
 
     if (isset($dailyRuns[$i->dayOfYear])) {
@@ -102,18 +102,22 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
         }
     }
 
+    $avgDailyRunKM = $totalKM / $i->dayOfYear;
     // do not know if this is the best place
     // data the array needs, that can be generated
     // in if OR else, ...
+
     $dailyRuns[$i->dayOfYear]['run_day'] = $i->dayOfYear;
     $dailyRuns[$i->dayOfYear]['totalKM'] = $totalKM;
     $dailyRuns[$i->dayOfYear]['totalGoalKM'] = $totalGoalKM;
     $dailyRuns[$i->dayOfYear]['KMtoGo'] = $KMtoGo;
-    $dailyRuns[$i->dayOfYear]['diffToGoal'] = $dailyRuns[$i->dayOfYear]['totalGoalKM'] - $dailyRuns[$i->dayOfYear]['totalKM'];
-    $dailyRuns[$i->dayOfYear]['avgDailyKM'] = round($avgDailyKM, 2);
+    // $dailyRuns[$i->dayOfYear]['diffToGoal'] = $dailyRuns[$i->dayOfYear]['totalGoalKM'] - $dailyRuns[$i->dayOfYear]['totalKM'];
+    $dailyRuns[$i->dayOfYear]['diffToGoal'] = $dailyRuns[$i->dayOfYear]['totalKM'] - $dailyRuns[$i->dayOfYear]['totalGoalKM'];
+    $dailyRuns[$i->dayOfYear]['avgDailyToGoKM'] = round($avgDailyToGoKM, 2);
+    $dailyRuns[$i->dayOfYear]['avgDailyRunKM'] = round($avgDailyRunKM, 2);
 
     // data we need in the next round!
-    $avgDailyKM = $KMtoGo / $i->diffInDays($i->lastOfYear());
+    $avgDailyToGoKM = $KMtoGo / $i->diffInDays($i->lastOfYear());
 
 
 }
