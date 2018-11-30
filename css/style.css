@@ -13,4 +13,7 @@ body {
     flex-direction: column;
     padding-left: 0;
     margin-bottom: 0;
+    position: fixed;
+    width: 200px;
 }
+
