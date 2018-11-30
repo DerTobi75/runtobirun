@@ -21,8 +21,28 @@ $twig->addExtension(new Twig_Extension_Debug());
 // ToDo:
 // Need to get year and month from URL
 $run_year = '2018';
+$today = Carbon::today();
 $immutable = CarbonImmutable::createFromDate($run_year, 1, 1);
 $period = CarbonPeriod::create($immutable->firstOfYear(), $immutable);
+
+if ($immutable->isCurrentYear()) {
+    $navBarMonth = $today->month;
+} else {
+    // ToDo: Built a better exit method when runYear greater current year!
+    if ($run_year < $today->year) {
+        $navBarMonth = 12;
+    } else {
+        die('You cannot run in the Future!');
+    }
+}
+
+// ToDo: This is shit!
+$myMonth = array('1' => 'Januar', '2' => 'Februar', '3' => 'März', '4' => 'April', '5' => 'Mai', '6' => 'Juni', '7' => 'Juli', '8' => 'August', '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Dezember', );
+
+for($cMonth = 1; $cMonth <= $navBarMonth; $cMonth++) {
+    $navBarItems[$cMonth]['monthInt'] = $cMonth;
+    $navBarItems[$cMonth]['monthName'] = $myMonth[$cMonth];
+}
 
 $qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year");
 
@@ -134,4 +154,4 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
 // sort the dailyRun Array
 ksort($dailyRuns);
-echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns));
+echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems));
