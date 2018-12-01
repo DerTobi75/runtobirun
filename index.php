@@ -136,6 +136,10 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $dailyRuns[$i->dayOfYear]['avgDailyToGoKM'] = round($avgDailyToGoKM, 2);
     $dailyRuns[$i->dayOfYear]['avgDailyRunKM'] = round($avgDailyRunKM, 2);
 
+    if($i->isLastOfMonth()) {
+        $dailyRuns[$i->dayOfYear]['lastOfMonth'] = $i->month;
+    }
+
     if($i->eq($i->firstOfMonth())) {
         $dailyRuns[$i->dayOfYear]['firstOfMonth'] = $i->month;
     }

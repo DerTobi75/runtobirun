@@ -15,7 +15,7 @@
                 <thead></thead>
                 <tbody>
                     {% for run in myRuns %}
-                        <tr{% if run.firstOfMonth %} id="list-item-{{ run.firstOfMonth }}"{% endif %}{% if not run.run_distance %} class="table-light text-muted"{% endif %}>
+                        <tr{% if run.firstOfMonth %} id="list-item-{{ run.firstOfMonth }}"{% endif %}{% if not run.run_distance %} class="table-light text-muted{% if run.lastOfMonth %} myMonth{% endif %}"{% else %}{% if run.lastOfMonth %} class="myMonth"{% endif %}{% endif %}>
                             <td>{{ run.run_date }} <small>({{ run.run_day }})</small></td>
                             <td align="right"{% if run.run_distance %} {% if run.run_distance > run.avgDailyToGoKM %}class="text-success"{% else %}class="text-danger"{% endif %}>{{ run.run_distance }} km {% else %}>&nbsp;{% endif %}</td>
                             <td align="right">{{ run.avgDailyToGoKM|number_format(2, ',', '.') }} km</td>
@@ -30,6 +30,6 @@
             </table>
             </div>
         </div>
-    </div>y i
+    </div>
 
 {% endblock content %}

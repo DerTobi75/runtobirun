@@ -29,3 +29,7 @@ body {
 
     top: 0; /* Required  */
 }
+
+.myMonth {
+    border-bottom: 2px solid #dee2e6;
+}
