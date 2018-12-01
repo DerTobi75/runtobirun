@@ -3,14 +3,14 @@
 {% block content %}
     <div class="row">
         <div class="col-3">
-            <div id="list-example" class="list-group">
+            <div id="list-example" class="list-group makemesticky">
                 {% for item in navBarItems %}
                 <a class="list-group-item list-group-item-action" href="#list-item-{{ item.monthInt }}">{{ item.monthName }}</a>
                 {% endfor %}
             </div>
         </div>
         <div class="col-9">
-            <div data-spy="scroll" id="firstRow" data-target="#list-example" data-offset="0" class="scrollspy-example">
+            <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example">
             <table class="table table-bordered">
                 <thead></thead>
                 <tbody>
@@ -30,5 +30,6 @@
             </table>
             </div>
         </div>
-    </div>
+    </div>y i
+
 {% endblock content %}
