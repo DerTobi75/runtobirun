@@ -76,7 +76,7 @@ $yearlyGoal = 2018;
 $dailyGoalKM = $yearlyGoal / 365;
 $records['streak'] = 0;
 $records['noRunning'] = 0;
-
+$monthlyStats = array('runCount' => 0, 'runDistance' => 0);
 
 for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $totalGoalKM += round($dailyGoalKM, 2);
@@ -87,6 +87,8 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
     if (isset($dailyRuns[$i->dayOfYear])) {
         $totalKM += $dailyRuns[$i->dayOfYear]['run_distance'];
+        $monthlyStats['runDistance'] += $dailyRuns[$i->dayOfYear]['run_distance'];
+        $monthlyStats['runCount']++;
         $KMtoGo = $yearlyGoal - $totalKM;
         if (isset($noRunningCounter)) {
             if($noRunningCounter > $records['noRunning']) {
@@ -138,8 +140,11 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 
     if($i->isLastOfMonth()) {
         $dailyRuns[$i->dayOfYear]['lastOfMonth'] = $i->month;
+        $navBarItems[$i->month]['stats'] = $monthlyStats;
+        $monthlyStats = array('runCount' => 0, 'runDistance' => 0);
     }
 
+    // ToDo: Check If can be written easier, look above!
     if($i->eq($i->firstOfMonth())) {
         $dailyRuns[$i->dayOfYear]['firstOfMonth'] = $i->month;
     }

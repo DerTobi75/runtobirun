@@ -2,10 +2,14 @@
 
 {% block content %}
     <div class="row">
+        <div class="col-6"><h4>Meine L&auml;ufe, ...</h4></div>
+        <div class="col-6"></div>
+    </div>
+    <div class="row">
         <div class="col-3">
             <div id="list-example" class="list-group makemesticky">
                 {% for item in navBarItems %}
-                <a class="list-group-item list-group-item-action" href="#list-item-{{ item.monthInt }}">{{ item.monthName }}</a>
+                    <a class="list-group-item list-group-item-action" href="#list-item-{{ item.monthInt }}">{{ item.monthName }}{% if item.stats %}<br /><small>({{ item.stats.runDistance }} km in {{ item.stats.runCount }} Run{% if item.stats.runCount > 1 %}s{% endif %})</small>{% endif %}</a>
                 {% endfor %}
             </div>
         </div>
@@ -31,5 +35,4 @@
             </div>
         </div>
     </div>
-
 {% endblock content %}
