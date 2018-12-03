@@ -49,7 +49,7 @@ $qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum
 try {
     $qSelect->execute(array('run_year' => $run_year));
 } catch (PDOException $e) {
-    // echo $e->getMessage();
+    echo $e->getMessage();
 }
 
 // echo "Zeilen: " . $qSelect->rowCount() . "<br />";
@@ -103,9 +103,6 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
             $streakCounter++;
         }
 
-        // Small Idea
-        // Period of Streak / No Running!
-
     } else {
         // we need a date for the table
         $dailyRuns[$i->dayOfYear]['run_date'] = $i->format('d.m.y');
@@ -144,23 +141,45 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
         $monthlyStats = array('runCount' => 0, 'runDistance' => 0);
     }
 
-    // ToDo: Check If can be written easier, look above!
     if($i->eq($i->firstOfMonth())) {
         $dailyRuns[$i->dayOfYear]['firstOfMonth'] = $i->month;
     }
 
-
     // data we need in the next round!
     $avgDailyToGoKM = $KMtoGo / $i->diffInDays($i->lastOfYear());
+
+}
+
+// sort the dailyRun Array
+ksort($dailyRuns);
+
+$qSelectWeekly = $pdo->prepare("SELECT WEEK(FROM_UNIXTIME(`lauf_datum`),1) AS `runWeek`, sum(`lauf_laenge`) AS `weekDistance`, count(`lauf_id`) AS `weekCount` FROM `laeufe` WHERE YEAR(FROM_UNIXTIME(`lauf_datum`)) = :run_year GROUP BY WEEK(FROM_UNIXTIME(`lauf_datum`),1)");
+
+try {
+    $qSelectWeekly->execute(array('run_year' => $run_year));
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
+
+// echo $qSelectWeekly->rowCount();
+
+
+// Think about this! Maybe do something else!
+$weeks = $qSelectWeekly->fetchAll();
+
+$myCounter = 0;
+for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
+
+    if(isset($weeks[$myCounter]['runWeek']) AND $weeks[$myCounter]['runWeek'] == $i) {
+        echo $weeks[$myCounter]['runWeek'] . " " . $weeks[$myCounter]['weekDistance'] . "km<br />";
+        $myCounter++;
+    } else {
+        echo $i . " 0km<br />";
+    }
 
 
 }
 
-// echo "Streak Record: " . $records['streak'] . " Days<br />";
-// echo "NoRunning Record: " . $records['noRunning'] . " Days<br />";
-// echo "Ende!";
 
 
-// sort the dailyRun Array
-ksort($dailyRuns);
 echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems));
