@@ -168,18 +168,38 @@ try {
 $weeks = $qSelectWeekly->fetchAll();
 
 $myCounter = 0;
+$runWeeks = array();
+$weekKMTotal = 0;
+$weeklyKMTogo = $yearlyGoal;
+// This is experimantal
+//$weeksInYear = $immutable->weeksInYear;
+$weekYearlyGoal = 0;
+$weeklyGoal = $yearlyGoal / $immutable->weeksInYear;
 for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
 
+    // Think about this shit again
+    $weekYearlyGoal += $weeklyGoal;
+    $runWeeks[$i]['weekGoalTotal'] = $weekYearlyGoal;
+    // $runWeeks[$i]['weekGoalTotalToGo'] = $weekYearlyGoal - $runWeeks[$i]['weekGoal'];
+    // $weekYearlyGoal = $runWeeks[$i]['weekGoalTotalToGo'];
+
     if(isset($weeks[$myCounter]['runWeek']) AND $weeks[$myCounter]['runWeek'] == $i) {
-        echo $weeks[$myCounter]['runWeek'] . " " . $weeks[$myCounter]['weekDistance'] . "km<br />";
+        $weekKMTotal += $weeks[$myCounter]['weekDistance'];
+        $weeklyKMTogo -= $weeks[$myCounter]['weekDistance'];
+        $runWeeks[$i]['weekNr'] = $i;
+        $runWeeks[$i]['weekDistance'] = $weeks[$myCounter]['weekDistance'];
+        $runWeeks[$i]['weekCount'] = $weeks[$myCounter]['weekCount'];
+        $runWeeks[$i]['weeksTotal'] = $weekKMTotal;
+        $runWeeks[$i]['weeksKMToGo'] = $weeklyKMTogo;
         $myCounter++;
     } else {
-        echo $i . " 0km<br />";
+        $runWeeks[$i]['weekNr'] = $i;
+        $runWeeks[$i]['weekDistance'] = 0;
+        $runWeeks[$i]['weekCount'] = 0;
+        $runWeeks[$i]['weeksTotal'] = $weekKMTotal;
+        $runWeeks[$i]['weeksKMToGo'] = $weeklyKMTogo;
     }
-
 
 }
 
-
-
-echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems));
+echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems, 'runWeeks' => $runWeeks));
