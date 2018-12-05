@@ -45,19 +45,19 @@
                         <th>Total</th>
                         <th>KM To Go</th>
                         <th>Goals</th>
-                        <!-- <th>Goals</th> -->
+                        <th>To Goals</th>
                         <th>L&auml;ufe</th>
                     </tr>
                 </thead>
             {% for week in runWeeks %}
                 <tr>
-                    <td>{{ week.weekNr }}</td>
-                    <td>{{ week.weekDistance|number_format(2, ',', '.') }} km</td>
-                    <td>{{ week.weeksTotal|number_format(2, ',', '.') }} km</td>
-                    <td>{{ week.weeksKMToGo|number_format(2, ',', '.') }} km</td>
-                    <td>{{ week.weekGoalTotal|number_format(2, ',', '.') }}</td>
-                    <!-- <td>{{ week.weekGoalTotalToGo }}</td> -->
-                    <td>{{ week.weekCount }}</td>
+                    <td align="right">{{ week.weekNr }}</td>
+                    <td align="right">{{ week.weekDistance|number_format(2, ',', '.') }} km</td>
+                    <td align="right">{{ week.weeksTotal|number_format(2, ',', '.') }} km</td>
+                    <td align="right">{{ week.weeksKMToGo|number_format(2, ',', '.') }} km</td>
+                    <td align="right">{{ week.weekGoalTotal|number_format(2, ',', '.') }}</td>
+                    <td align="right">{{ week.weeksKMToRun|number_format(2, ',', '.') }}</td>
+                    <td align="right">{{ week.weekCount }}</td>
                 </tr>
             {% endfor %}
             </table>

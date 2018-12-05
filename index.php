@@ -161,10 +161,9 @@ try {
     echo $e->getMessage();
 }
 
-// echo $qSelectWeekly->rowCount();
-
-
 // Think about this! Maybe do something else!
+// ToDo: This might get a completly revamp!
+
 $weeks = $qSelectWeekly->fetchAll();
 
 $myCounter = 0;
@@ -175,6 +174,7 @@ $weeklyKMTogo = $yearlyGoal;
 //$weeksInYear = $immutable->weeksInYear;
 $weekYearlyGoal = 0;
 $weeklyGoal = $yearlyGoal / $immutable->weeksInYear;
+$weeklyKMToRun = $weeklyGoal;
 for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
 
     // Think about this shit again
@@ -191,6 +191,7 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
         $runWeeks[$i]['weekCount'] = $weeks[$myCounter]['weekCount'];
         $runWeeks[$i]['weeksTotal'] = $weekKMTotal;
         $runWeeks[$i]['weeksKMToGo'] = $weeklyKMTogo;
+        $runWeeks[$i]['weeksKMToRun'] = $weeklyKMToRun;
         $myCounter++;
     } else {
         $runWeeks[$i]['weekNr'] = $i;
@@ -198,7 +199,11 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
         $runWeeks[$i]['weekCount'] = 0;
         $runWeeks[$i]['weeksTotal'] = $weekKMTotal;
         $runWeeks[$i]['weeksKMToGo'] = $weeklyKMTogo;
+        $runWeeks[$i]['weeksKMToRun'] = round($weeklyKMToRun, 2);
     }
+
+    $weeksToGo = $immutable->weeksInYear - $i;
+    $weeklyKMToRun = $weeklyKMTogo / $weeksToGo;
 
 }
 
