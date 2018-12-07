@@ -18,6 +18,9 @@ $twig = new Twig_Environment($loader, array(
 ));
 $twig->addExtension(new Twig_Extension_Debug());
 
+
+$pageTitle = "Meine Läufe, ...";
+
 // ToDo:
 // Need to get year and month from URL
 $run_year = '2018';
@@ -202,9 +205,25 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
         $runWeeks[$i]['weeksKMToRun'] = round($weeklyKMToRun, 2);
     }
 
+
+    if($runWeeks[$i]['weekDistance'] > 0) {
+        $weekPercent = ($runWeeks[$i]['weekDistance'] * 100) / $runWeeks[$i]['weeksKMToRun'];
+    } else {
+        $weekPercent = 0;
+    }
+
+    $runWeeks[$i]['weekPercent'] = round($weekPercent);
+
+    if($runWeeks[$i]['weekPercent'] >= 100) {
+        $runWeeks[$i]['progressClass'] = "bg-success";
+    } elseif ($runWeeks[$i]['weekPercent'] > 49) {
+        $runWeeks[$i]['progressClass'] = "bg-warning";
+    } else {
+        $runWeeks[$i]['progressClass'] = "bg-danger";
+    }
+
     $weeksToGo = $immutable->weeksInYear - $i;
     $weeklyKMToRun = $weeklyKMTogo / $weeksToGo;
-
 }
 
-echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems, 'runWeeks' => $runWeeks));
+echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems, 'runWeeks' => $runWeeks, 'pageTitle' => $pageTitle));
