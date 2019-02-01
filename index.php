@@ -23,7 +23,7 @@ $pageTitle = "Meine Läufe, ...";
 
 // ToDo:
 // Need to get year and month from URL
-$run_year = '2018';
+$run_year = '2019';
 $today = Carbon::today();
 $immutable = CarbonImmutable::createFromDate($run_year, 1, 1);
 $period = CarbonPeriod::create($immutable->firstOfYear(), $immutable);
@@ -75,7 +75,11 @@ $totalGoalKM = 0;
 $diffToGoal = 0;
 // ToDo: get yearlyGoal from the database or set it elsewhere,
 // ToDo: but do not let it be static!
-$yearlyGoal = 2018;
+$yearlyGoal = 2019;
+
+// ToDo: Check if this makes sense!!
+$KMtoGo = $yearlyGoal;
+
 $dailyGoalKM = $yearlyGoal / 365;
 $records['streak'] = 0;
 $records['noRunning'] = 0;
