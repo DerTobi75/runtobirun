@@ -142,9 +142,11 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $dailyRuns[$i->dayOfYear]['avgDailyToGoKM'] = round($avgDailyToGoKM, 2);
     $dailyRuns[$i->dayOfYear]['avgDailyRunKM'] = round($avgDailyRunKM, 2);
 
+    $navBarItems[$i->month]['stats'] = $monthlyStats;
+
     if($i->isLastOfMonth()) {
         $dailyRuns[$i->dayOfYear]['lastOfMonth'] = $i->month;
-        $navBarItems[$i->month]['stats'] = $monthlyStats;
+        //$navBarItems[$i->month]['stats'] = $monthlyStats;
         $monthlyStats = array('runCount' => 0, 'runDistance' => 0);
     }
 

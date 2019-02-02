@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-3">
-            <div id="list-example" class="list-group makemesticky">
+            <div id="list-example" class="list-group list-month">
                 {% for item in navBarItems %}
                     <a class="list-group-item list-group-item-action" href="#list-item-{{ item.monthInt }}">{{ item.monthName }}{% if item.stats %}<br /><small>({{ item.stats.runDistance }} km in {{ item.stats.runCount }} Run{% if item.stats.runCount > 1 %}s{% endif %})</small>{% endif %}</a>
                 {% endfor %}
@@ -72,3 +72,11 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block javaScripts %}
+{{ parent() }}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery.sticky-kit.min.js"></script>
+    <script>$(".list-month").stick_in_parent({offset_top: "50px"});</script>
+{% endblock %}
