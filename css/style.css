@@ -17,21 +17,8 @@ table {
     flex-direction: column;
     padding-left: 0;
     margin-bottom: 0;
-    position: fixed;
+    padding-bottom: 10px;
     width: 250px;
-}
-
-.makemesticky {
-    position: relative; /* I am the fallback */
-
-    /* Give it everything you got! (use an auto prefixer...) */
-    position: -webkit-sticky;
-    position: -moz-sticky;
-    position: -ms-sticky;
-    position: -o-sticky;
-    position: sticky;
-
-    top: 0; /* Required  */
 }
 
 .myMonth {
