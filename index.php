@@ -185,7 +185,7 @@ $weekYearlyGoal = 0;
 $weeklyGoal = $yearlyGoal / $immutable->weeksInYear;
 $weeklyKMToRun = $weeklyGoal;
 for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
-    
+
     // Think about this shit again
     $weekYearlyGoal += $weeklyGoal;
     $runWeeks[$i]['weekGoalTotal'] = $weekYearlyGoal;

@@ -54,11 +54,19 @@ if($fs->exists($uploadDir . "/" . $fileName)) {
         $pFFA = new adriangibbons\phpFITFileAnalysis('fit/new/' . $fileName);
 
         // Check if you can use an array or variables, you nearly use the same data above for the DB Query
+        // Check how to know which array is running, in BRICK Activity it is right now 2
 
-        $output['datum'] = $pFFA->data_mesgs['session']['start_time'];
-        $output['laenge'] = $pFFA->data_mesgs['session']['total_distance'];
-        $output['dauer'] = $pFFA->data_mesgs['session']['total_timer_time'];
-        $output['filename'] = $fileName;
+        if(is_array($pFFA->data_mesgs['session']['start_time'])) {
+            $output['datum'] = $pFFA->data_mesgs['session']['start_time'][2];
+            $output['laenge'] = $pFFA->data_mesgs['session']['total_distance'][2];
+            $output['dauer'] = $pFFA->data_mesgs['session']['total_timer_time'][2];
+            $output['filename'] = $fileName;
+        } else {
+            $output['datum'] = $pFFA->data_mesgs['session']['start_time'];
+            $output['laenge'] = $pFFA->data_mesgs['session']['total_distance'];
+            $output['dauer'] = $pFFA->data_mesgs['session']['total_timer_time'];
+            $output['filename'] = $fileName;
+        }
 
         $inDB = [
             'lauf' => 'Laufname',
