@@ -78,8 +78,36 @@
         </div>
     </div>
 
-
-    {{ rMonth }}.{{ rYear }} - {{ pMonth }}.{{ pYear }}
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Monat</th>
+                        <th>Distanz</th>
+                        <th>Total</th>
+                        <th>Theoretisch</th>
+                        <th>MZiel</th>
+                        <th>Hinter</th>
+                        <th>Anzahl</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for month in runMonths %}
+                    <tr>
+                        <td align="right">{{ month.month }}</td>
+                        <td align="right">{{ month.length|number_format(2, ',', '.') }} km</td>
+                        <td align="right">{{ month.countLength|number_format(2, ',', '.') }} km</td>
+                        <td align="right">{{ month.countMonthlyGoal|number_format(2, ',', '.') }} km</td>
+                        <td align="right">{{ month.monthlyToGoReal|number_format(2, ',', '.') }} km</td>
+                        <td align="right">{{ month.monthlyBehind|number_format(2, ',', '.') }} km</td>
+                        <td align="right">{{ month.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 {% endblock content %}
 

@@ -268,9 +268,50 @@ foreach ($qSelectRunsInMonth->fetchAll() AS $pMonthData) {
         'kmSum' => $pMonSumKM);
 }
 
+
+$qSelectMonthlyStats = $pdo->prepare('SELECT month(FROM_UNIXTIME(lauf_datum)) AS monat, sum(lauf_laenge) AS laenge, count(FROM_UNIXTIME(lauf_datum)) AS anzahl FROM `laeufe` WHERE year(FROM_UNIXTIME(lauf_datum)) = :year GROUP By month(FROM_UNIXTIME(lauf_datum))');
+$qSelectMonthlyStats->execute(array('year' => $run_year));
+
+
+$countTotal = 0;
+$countLength = 0;
+$countMontlyGoal = 0;
+
+$monthlyGoal = $yearlyGoal / 12;
+foreach ($qSelectMonthlyStats->fetchAll() AS $mStats) {
+
+    $countTotal += $mStats['anzahl'];
+    $countLength += round($mStats['laenge'], 2);
+    $countMonthlyGoal += $monthlyGoal;
+    $monthlyToGo = $yearlyGoal - $countLength;
+
+    if($mStats['monat'] == 1) {
+        $monthlyToGoReal = $monthlyGoal;
+    } else {
+        $monthlyToGoReal = ($yearlyGoal - $countLength) / (12 - $mStats['monat']);
+    }
+
+    $mBehind = $countMonthlyGoal - $countLength;
+
+
+    $monthlyRuns[$mStats['monat']] = array('month' => $mStats['monat'],
+                                            'length' => round($mStats['laenge'], 2),
+                                            'count' => $mStats['anzahl'],
+                                            'countTotal' => $countTotal,
+                                            'countLength' => round($countLength, 2),
+                                            'countMonthlyGoal' => round($countMonthlyGoal, 2),
+                                            'monthlyToGo' => round($monthlyToGo, 2),
+                                            'monthlyToGoReal' => $monthlyToGoReal,
+                                            'monthlyBehind' => round($mBehind, 2));
+}
+
+
+
+
 echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns,
                                                 'navBarItems' => $navBarItems,
                                                 'runWeeks' => $runWeeks,
+                                                'runMonths' => $monthlyRuns,
                                                 'rMonth' => $rMonth,
                                                 'pMonth' => $pMonth,
                                                 'rYear' => $rYear,
