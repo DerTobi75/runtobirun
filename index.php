@@ -232,4 +232,49 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
     $weeklyKMToRun = $weeklyKMTogo / $weeksToGo;
 }
 
-echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns, 'navBarItems' => $navBarItems, 'runWeeks' => $runWeeks, 'pageTitle' => $pageTitle));
+
+$qSelectRunsInMonth = $pdo->prepare("SELECT * FROM `laeufe` WHERE month(from_unixtime(lauf_datum)) = :month AND year(from_unixtime(lauf_datum)) = :year");
+
+$rMonth = $today->month;
+$pMonth = $today->subMonth()->month;
+$rYear = $today->year;
+$pYear = $today->subMonth()->year;
+
+$qSelectRunsInMonth->execute(array('month' => $rMonth, 'year' => $rYear));
+foreach ($qSelectRunsInMonth->fetchAll() AS $rMonthData) {
+    $rMonDay = Carbon::createFromTimestamp($rMonthData['lauf_datum'])->day;
+
+    if(!isset($rMonSumKM)) {
+        $rMonSumKM = $rMonthData['lauf_laenge'];
+    } else {
+        $rMonSumKM += $rMonthData['lauf_laenge'];
+    }
+
+    $rMonData[] = array('day' => $rMonDay,
+        'kmSum' => $rMonSumKM);
+}
+
+$qSelectRunsInMonth->execute(array('month' => $pMonth, 'year' => $pYear));
+foreach ($qSelectRunsInMonth->fetchAll() AS $pMonthData) {
+    $pMonDay = Carbon::createFromTimestamp($pMonthData['lauf_datum'])->day;
+
+    if(!isset($pMonSumKM)) {
+        $pMonSumKM = $pMonthData['lauf_laenge'];
+    } else {
+        $pMonSumKM += $pMonthData['lauf_laenge'];
+    }
+
+    $pMonData[] = array('day' => $pMonDay,
+        'kmSum' => $pMonSumKM);
+}
+
+echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns,
+                                                'navBarItems' => $navBarItems,
+                                                'runWeeks' => $runWeeks,
+                                                'rMonth' => $rMonth,
+                                                'pMonth' => $pMonth,
+                                                'rYear' => $rYear,
+                                                'pYear' => $pYear,
+                                                'rMonData' => $rMonData,
+                                                'pMonData' => $pMonData,
+                                                'pageTitle' => $pageTitle));
