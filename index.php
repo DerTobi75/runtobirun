@@ -291,7 +291,23 @@ foreach ($qSelectMonthlyStats->fetchAll() AS $mStats) {
         $monthlyToGoReal = ($yearlyGoal - $countLength) / (12 - $mStats['monat']);
     }
 
-    $mBehind = $countMonthlyGoal - $countLength;
+    $mBehind = $countLength - $countMonthlyGoal;
+
+    $monthlyGoalDiff = $mStats['laenge'] - $monthlyToGoReal;
+
+    if($mStats['laenge'] > 0) {
+        $monthlyPercent = ($mStats['laenge'] * 100) / $monthlyToGoReal;
+    } else {
+        $monthlyPercent = 0;
+    }
+
+    if($monthlyPercent >= 100) {
+        $progressClass = "bg-success";
+    } elseif ($monthlyPercent > 49) {
+        $progressClass = "bg-warning";
+    } else {
+        $progressClass = "bg-danger";
+    }
 
 
     $monthlyRuns[$mStats['monat']] = array('month' => $mStats['monat'],
@@ -302,7 +318,10 @@ foreach ($qSelectMonthlyStats->fetchAll() AS $mStats) {
                                             'countMonthlyGoal' => round($countMonthlyGoal, 2),
                                             'monthlyToGo' => round($monthlyToGo, 2),
                                             'monthlyToGoReal' => $monthlyToGoReal,
-                                            'monthlyBehind' => round($mBehind, 2));
+                                            'monthlyBehind' => round($mBehind, 2),
+                                            'monthlyGoalDiff' => round($monthlyGoalDiff, 2),
+                                            'monthlyPercent' => $monthlyPercent,
+                                            'progressClass' => $progressClass);
 }
 
 

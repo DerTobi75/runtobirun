@@ -25,6 +25,6 @@ table {
     border-bottom: 2px solid #dee2e6;
 }
 
-td.weekPercent {
+td.weekPercent, td.monthPercent {
     vertical-align: middle;
 }

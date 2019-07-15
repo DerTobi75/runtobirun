@@ -37,6 +37,13 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <table class="table table-bordered">
@@ -74,22 +81,18 @@
 
     <div class="row">
         <div class="col-12">
-            <canvas id="myChart"></canvas>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Monat</th>
                         <th>Distanz</th>
                         <th>Total</th>
-                        <th>Theoretisch</th>
+                        <th>KM Soll</th>
                         <th>MZiel</th>
+                        <th>MZielDiff</th>
                         <th>Hinter</th>
                         <th>Anzahl</th>
+                        <th>...</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,8 +103,14 @@
                         <td align="right">{{ month.countLength|number_format(2, ',', '.') }} km</td>
                         <td align="right">{{ month.countMonthlyGoal|number_format(2, ',', '.') }} km</td>
                         <td align="right">{{ month.monthlyToGoReal|number_format(2, ',', '.') }} km</td>
+                        <td align="right" class="{% if month.monthlyGoalDiff > 0 %}text-success{%  else %}text-danger{% endif %}">{{ month.monthlyGoalDiff|number_format(2, ',', '.') }} km</td>
                         <td align="right">{{ month.monthlyBehind|number_format(2, ',', '.') }} km</td>
                         <td align="right">{{ month.count }}</td>
+                        <td class="monthPercent" width="75">
+                            <div class="progress" style="height: 4px;">
+                                <div class="progress-bar {{ month.progressClass }}" role="progressbar" style="width: {{ month.monthlyPercent }}%;" aria-valuenow="{{ month.monthlyPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
