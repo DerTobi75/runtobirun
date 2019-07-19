@@ -230,6 +230,9 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
 
     $weeksToGo = $immutable->weeksInYear - $i;
     $weeklyKMToRun = $weeklyKMTogo / $weeksToGo;
+
+    $weeklyStats[$i] = array('weekNr' => $i, 'weekLength' => $weekKMTotal);
+
 }
 
 
@@ -330,6 +333,7 @@ foreach ($qSelectMonthlyStats->fetchAll() AS $mStats) {
 echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns,
                                                 'navBarItems' => $navBarItems,
                                                 'runWeeks' => $runWeeks,
+                                                'weeklyStats' => $weeklyStats,
                                                 'runMonths' => $monthlyRuns,
                                                 'rMonth' => $rMonth,
                                                 'pMonth' => $pMonth,

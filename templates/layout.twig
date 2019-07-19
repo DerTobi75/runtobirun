@@ -82,7 +82,53 @@
                 }]
             }
         }
+        })
+
+
+
+
+        var cty = document.getElementById('myWeeklyChart').getContext('2d');
+        var chart = new Chart(cty, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: [{% for weeks in weeklyStats %}'{{ weeks.weekNr }}', {% endfor %}],
+                datasets: [{
+                    label: 'Week',
+                    backgroundColor: 'rgb(255, 0, 0, 0.1)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    pointBackgroundColor: 'rgb(255, 0, 0)',
+                    data: [{% for weekStats in weeklyStats %}
+                        {x:{{ weekStats.weekNr }},
+                            y:{{ weekStats.weekLength}}},
+                        {% endfor %}
+                    ]
+                }
+                ]
+            },
+
+            // Configuration options go here
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            min: 1,
+                            stepSize: 1
+                        },
+                        beginAtZero: false,
+                        min: 1,
+                        type: 'category',
+                        labels: [{% for weeks in weeklyStats %}'{{ weeks.weekNr }}', {% endfor %}],
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                }
+            }
         });
+
+
     </script>
 {% endblock %}
 </body>
