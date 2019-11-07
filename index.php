@@ -47,7 +47,7 @@ for($cMonth = 1; $cMonth <= $navBarMonth; $cMonth++) {
     $navBarItems[$cMonth]['monthName'] = $myMonth[$cMonth];
 }
 
-$qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year");
+$qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year ORDER BY `lauf_datum`");
 
 try {
     $qSelect->execute(array('run_year' => $run_year));
@@ -236,7 +236,7 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
 }
 
 
-$qSelectRunsInMonth = $pdo->prepare("SELECT * FROM `laeufe` WHERE month(from_unixtime(lauf_datum)) = :month AND year(from_unixtime(lauf_datum)) = :year");
+$qSelectRunsInMonth = $pdo->prepare("SELECT * FROM `laeufe` WHERE month(from_unixtime(lauf_datum)) = :month AND year(from_unixtime(lauf_datum)) = :year ORDER BY `lauf_datum`");
 
 $rMonth = $today->month;
 $pMonth = $today->subMonth()->month;
@@ -284,15 +284,16 @@ $monthlyGoal = $yearlyGoal / 12;
 foreach ($qSelectMonthlyStats->fetchAll() AS $mStats) {
 
     $countTotal += $mStats['anzahl'];
-    $countLength += round($mStats['laenge'], 2);
-    $countMonthlyGoal += $monthlyGoal;
     $monthlyToGo = $yearlyGoal - $countLength;
 
     if($mStats['monat'] == 1) {
         $monthlyToGoReal = $monthlyGoal;
     } else {
-        $monthlyToGoReal = ($yearlyGoal - $countLength) / (12 - $mStats['monat']);
+        $monthlyToGoReal = ($yearlyGoal - $countLength) / (12 - $mStats['monat'] + 1);
     }
+    $countMonthlyGoal += $monthlyGoal;
+    $countLength += round($mStats['laenge'], 2);
+
 
     $mBehind = $countLength - $countMonthlyGoal;
 
