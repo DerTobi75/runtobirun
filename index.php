@@ -248,6 +248,12 @@ foreach ($qSelectRunsInMonth->fetchAll() AS $rMonthData) {
     $rMonDay = Carbon::createFromTimestamp($rMonthData['lauf_datum'])->day;
 
     if(!isset($rMonSumKM)) {
+
+        if($pMonDay > 1) {
+            $pMonData[] = array('day' => 1,
+                'kmSum' => 0);
+        }
+
         $rMonSumKM = $rMonthData['lauf_laenge'];
     } else {
         $rMonSumKM += $rMonthData['lauf_laenge'];
@@ -262,6 +268,12 @@ foreach ($qSelectRunsInMonth->fetchAll() AS $pMonthData) {
     $pMonDay = Carbon::createFromTimestamp($pMonthData['lauf_datum'])->day;
 
     if(!isset($pMonSumKM)) {
+
+        if($pMonDay > 1) {
+            $pMonData[] = array('day' => 1,
+                'kmSum' => 0);
+        }
+
         $pMonSumKM = $pMonthData['lauf_laenge'];
     } else {
         $pMonSumKM += $pMonthData['lauf_laenge'];
