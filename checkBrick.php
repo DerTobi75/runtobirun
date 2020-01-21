@@ -1,12 +1,13 @@
 <?php
 
 require_once 'vendor/autoload.php';
-$fileName = '3949837230.fit';
+$fileName = '4319471128.fit';
 
 
 $options = ['units' => 'statute', 'pace' => true];
 
-$pFFA = new adriangibbons\phpFITFileAnalysis('fit/done/' . $fileName, $options);
+// $pFFA = new adriangibbons\phpFITFileAnalysis('fit/done/' . $fileName, $options);
+$pFFA = new adriangibbons\phpFITFileAnalysis($fileName, $options);
 
 $pFFA->data_mesgs['session']['total_distance'] . "<br />";
 

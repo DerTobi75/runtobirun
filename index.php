@@ -23,7 +23,7 @@ $pageTitle = "Meine Läufe, ...";
 
 // ToDo:
 // Need to get year and month from URL
-$run_year = '2019';
+$run_year = '2020';
 $today = Carbon::today();
 $immutable = CarbonImmutable::createFromDate($run_year, 1, 1);
 $period = CarbonPeriod::create($immutable->firstOfYear(), $immutable);
@@ -75,7 +75,7 @@ $totalGoalKM = 0;
 $diffToGoal = 0;
 // ToDo: get yearlyGoal from the database or set it elsewhere,
 // ToDo: but do not let it be static!
-$yearlyGoal = 2019;
+$yearlyGoal = 2020;
 
 // ToDo: Check if this makes sense!!
 $KMtoGo = $yearlyGoal;
@@ -238,12 +238,14 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
 
 $qSelectRunsInMonth = $pdo->prepare("SELECT * FROM `laeufe` WHERE month(from_unixtime(lauf_datum)) = :month AND year(from_unixtime(lauf_datum)) = :year ORDER BY `lauf_datum`");
 
-$rMonth = $today->month;
-$pMonth = $today->subMonth()->month;
-$rYear = $today->year;
-$pYear = $today->subMonth()->year;
+
+$rMonth = Carbon::today()->month;
+$pMonth = Carbon::today()->subMonth()->month;
+$rYear = Carbon::today()->year;
+$pYear = Carbon::today()->subMonth()->year;
 
 $qSelectRunsInMonth->execute(array('month' => $rMonth, 'year' => $rYear));
+
 foreach ($qSelectRunsInMonth->fetchAll() AS $rMonthData) {
     $rMonDay = Carbon::createFromTimestamp($rMonthData['lauf_datum'])->day;
 
