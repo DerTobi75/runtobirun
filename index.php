@@ -133,6 +133,8 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     // data the array needs, that can be generated
     // in if OR else, ...
 
+    $yearDaysLeft = 365 - $i->dayOfYear;
+
     $dailyRuns[$i->dayOfYear]['run_day'] = $i->dayOfYear;
     $dailyRuns[$i->dayOfYear]['totalKM'] = $totalKM;
     $dailyRuns[$i->dayOfYear]['totalGoalKM'] = $totalGoalKM;
@@ -141,6 +143,8 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     $dailyRuns[$i->dayOfYear]['diffToGoal'] = $dailyRuns[$i->dayOfYear]['totalKM'] - $dailyRuns[$i->dayOfYear]['totalGoalKM'];
     $dailyRuns[$i->dayOfYear]['avgDailyToGoKM'] = round($avgDailyToGoKM, 2);
     $dailyRuns[$i->dayOfYear]['avgDailyRunKM'] = round($avgDailyRunKM, 2);
+    $dailyRuns[$i->dayOfYear]['prognoseKM'] = $avgDailyRunKM * 365;
+
 
     $navBarItems[$i->month]['stats'] = $monthlyStats;
 
