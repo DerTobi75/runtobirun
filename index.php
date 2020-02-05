@@ -192,6 +192,9 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
     // $runWeeks[$i]['weekGoalTotalToGo'] = $weekYearlyGoal - $runWeeks[$i]['weekGoal'];
     // $weekYearlyGoal = $runWeeks[$i]['weekGoalTotalToGo'];
 
+
+    $weeKMToRunDiff = $weeklyKMToRun - $weeks[$myCounter]['weekDistance'];
+
     if(isset($weeks[$myCounter]['runWeek']) AND $weeks[$myCounter]['runWeek'] == $i) {
         $weekKMTotal += $weeks[$myCounter]['weekDistance'];
         $weeklyKMTogo -= $weeks[$myCounter]['weekDistance'];
@@ -199,21 +202,23 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
         $runWeeks[$i]['weekDistance'] = $weeks[$myCounter]['weekDistance'];
         $runWeeks[$i]['weekCount'] = $weeks[$myCounter]['weekCount'];
         $runWeeks[$i]['weeksTotal'] = $weekKMTotal;
+        $runWeeks[$i]['weekKMToRunDiff'] = $weeKMToRunDiff;
         $runWeeks[$i]['weeksKMToGo'] = $weeklyKMTogo;
-        $runWeeks[$i]['weeksKMToRun'] = $weeklyKMToRun;
+        $runWeeks[$i]['weekKMToRun'] = $weeklyKMToRun;
         $myCounter++;
     } else {
         $runWeeks[$i]['weekNr'] = $i;
         $runWeeks[$i]['weekDistance'] = 0;
         $runWeeks[$i]['weekCount'] = 0;
         $runWeeks[$i]['weeksTotal'] = $weekKMTotal;
+        $runWeeks[$i]['weekKMToRunDiff'] = $weeKMToRunDiff;
         $runWeeks[$i]['weeksKMToGo'] = $weeklyKMTogo;
         $runWeeks[$i]['weeksKMToRun'] = round($weeklyKMToRun, 2);
     }
 
 
     if($runWeeks[$i]['weekDistance'] > 0) {
-        $weekPercent = ($runWeeks[$i]['weekDistance'] * 100) / $runWeeks[$i]['weeksKMToRun'];
+        $weekPercent = ($runWeeks[$i]['weekDistance'] * 100) / $runWeeks[$i]['weekKMToRun'];
     } else {
         $weekPercent = 0;
     }
@@ -251,8 +256,8 @@ foreach ($qSelectRunsInMonth->fetchAll() AS $rMonthData) {
 
     if(!isset($rMonSumKM)) {
 
-        if($pMonDay > 1) {
-            $pMonData[] = array('day' => 1,
+        if($rMonDay > 1) {
+            $rMonData[] = array('day' => 1,
                 'kmSum' => 0);
         }
 

@@ -55,6 +55,7 @@
                         <th>KM To Go</th>
                         <th>Goals</th>
                         <th>To Goals</th>
+                        <th>To GoDiff</th>
                         <th>L&auml;ufe</th>
                         <th>...</th>
                     </tr>
@@ -66,7 +67,8 @@
                     <td align="right">{{ week.weeksTotal|number_format(2, ',', '.') }} km</td>
                     <td align="right">{{ week.weeksKMToGo|number_format(2, ',', '.') }} km</td>
                     <td align="right">{{ week.weekGoalTotal|number_format(2, ',', '.') }} km</td>
-                    <td align="right">{{ week.weeksKMToRun|number_format(2, ',', '.') }} km</td>
+                    <td align="right">{{ week.weekKMToRun|number_format(2, ',', '.') }} km</td>
+                    <td align="right" class="{% if week.weekKMToRunDiff < 0 %}text-success{% else %}text-danger{% endif %}">{{ week.weekKMToRunDiff|number_format(2, ',', '.') }} km</td>
                     <td align="right">{{ week.weekCount }}</td>
                     <td class="weekPercent" width="75">
                         <div class="progress" style="height: 4px;">
