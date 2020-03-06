@@ -161,11 +161,19 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
     // data we need in the next round!
     $avgDailyToGoKM = $KMtoGo / $i->diffInDays($i->lastOfYear());
 
+    if (isset($dailyRuns[$i->dayOfYear]) AND $dailyRuns[$i->dayOfYear]['run_distance'] > 0) {
+        $avgStats[] = array(
+            'dayNo' => $i->dayOfYear,
+            'avgDailyToGoKM' => round($avgDailyToGoKM, 2),
+            'avgDailyRunKM' => round($avgDailyRunKM, 2),
+        );
+    }
+
+
 }
 
 // sort the dailyRun Array
 ksort($dailyRuns);
-
 $dayCount = $i->dayOfYear;
 
 $qSelectWeekly = $pdo->prepare("SELECT WEEK(FROM_UNIXTIME(`lauf_datum`),1) AS `runWeek`, sum(`lauf_laenge`) AS `weekDistance`, count(`lauf_id`) AS `weekCount` FROM `laeufe` WHERE YEAR(FROM_UNIXTIME(`lauf_datum`)) = :run_year GROUP BY WEEK(FROM_UNIXTIME(`lauf_datum`),1)");
@@ -368,4 +376,5 @@ echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns,
                                                 'rMonData' => $rMonData,
                                                 'pMonData' => $pMonData,
                                                 'pageTitle' => $pageTitle,
-                                                'dayCount' => $dayCount));
+                                                'dayCount' => $dayCount,
+                                                'avgStats' => $avgStats));
