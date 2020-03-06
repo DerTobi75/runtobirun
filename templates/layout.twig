@@ -57,7 +57,7 @@
             pointBackgroundColor: 'rgb(123, 123, 123)',
             data: [{% for pStats in pMonData %}
                 {x:{{ pStats.day }},
-                    y:{{ pStats.kmSum}}},
+                 y:{{ pStats.kmSum}}},
                 {% endfor %}
             ]
         }
@@ -128,6 +128,57 @@
             }
         });
 
+
+        var ctz = document.getElementById('myDailyGoal').getContext('2d');
+        var chart = new Chart(ctz, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: [{% for dayNo in 1..dayCount %}'{{ dayNo }}', {% endfor %}],
+                datasets: [{
+                    label: 'avgToGo',
+                    backgroundColor: 'rgb(255, 0, 0, 0.1)',
+                    borderColor: 'rgb(255, 0, 0)',
+                    pointBackgroundColor: 'rgb(255, 0, 0)',
+                    data: [{% for avgDay in myRuns %}
+                        {x:{{ avgDay.run_day }},
+                            y:{{ avgDay.avgDailyToGoKM}}},
+                        {% endfor %}
+                    ]
+                },{
+                    label: 'avgRun',
+                    backgroundColor: 'rgb(0, 0, 0, 0.1)',
+                    borderColor: 'rgb(123, 123, 123)',
+                    pointBackgroundColor: 'rgb(123, 123, 123)',
+                    data: [{% for avgRun in myRuns %}
+                        {x:{{ avgRun.run_day }},
+                            y:{{ avgRun.avgDailyRunKM}}},
+                        {% endfor %}
+                    ]
+                }
+                ]
+            },
+
+            // Configuration options go here
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            min: 1,
+                            stepSize: 1
+                        },
+                        beginAtZero: false,
+                        min: 1,
+                        type: 'category',
+                        labels: [{% for dayNo in 1..dayCount %}'{{ dayNo }}', {% endfor %}],
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                }
+            }
+        });
 
     </script>
 {% endblock %}

@@ -166,6 +166,8 @@ for($i = $immutable->firstOfYear(); $i <= Carbon::today(); $i = $i->addDay(1)) {
 // sort the dailyRun Array
 ksort($dailyRuns);
 
+$dayCount = $i->dayOfYear;
+
 $qSelectWeekly = $pdo->prepare("SELECT WEEK(FROM_UNIXTIME(`lauf_datum`),1) AS `runWeek`, sum(`lauf_laenge`) AS `weekDistance`, count(`lauf_id`) AS `weekCount` FROM `laeufe` WHERE YEAR(FROM_UNIXTIME(`lauf_datum`)) = :run_year GROUP BY WEEK(FROM_UNIXTIME(`lauf_datum`),1)");
 
 try {
@@ -365,4 +367,5 @@ echo $twig->render('runtable.twig', array('myRuns' => $dailyRuns,
                                                 'pYear' => $pYear,
                                                 'rMonData' => $rMonData,
                                                 'pMonData' => $pMonData,
-                                                'pageTitle' => $pageTitle));
+                                                'pageTitle' => $pageTitle,
+                                                'dayCount' => $dayCount));
