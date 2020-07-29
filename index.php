@@ -47,7 +47,10 @@ for($cMonth = 1; $cMonth <= $navBarMonth; $cMonth++) {
     $navBarItems[$cMonth]['monthName'] = $myMonth[$cMonth];
 }
 
-$qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year ORDER BY `lauf_datum`");
+//$qSelect = $pdo->prepare("SELECT * FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year ORDER BY `lauf_datum`");
+
+$qSelect = $pdo->prepare("SELECT `lauf_id`, `lauf_datum` , SUM(`lauf_laenge`) as `lauf_laenge`, FROM_UNIXTIME(`lauf_datum`, '%Y-%m-%d') as `tester` FROM `laeufe` WHERE FROM_UNIXTIME(`lauf_datum`, '%Y') = :run_year GROUP BY `tester` ORDER BY `lauf_datum`");
+
 
 try {
     $qSelect->execute(array('run_year' => $run_year));
