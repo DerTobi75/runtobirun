@@ -142,6 +142,7 @@
                     backgroundColor: 'rgb(255, 0, 0, 0.1)',
                     borderColor: 'rgb(255, 0, 0)',
                     pointBackgroundColor: 'rgb(255, 0, 0)',
+					pointRadius: 0,
                     data: [{% for avgDay in avgStats %}
                         {x:{{ avgDay.dayNo }},
                             y:{{ avgDay.avgDailyToGoKM}}},
@@ -152,6 +153,7 @@
                     backgroundColor: 'rgb(0, 0, 0, 0.1)',
                     borderColor: 'rgb(123, 123, 123)',
                     pointBackgroundColor: 'rgb(123, 123, 123)',
+					pointRadius: 0,
                     data: [{% for avgRun in avgStats %}
                         {x:{{ avgRun.dayNo }},
                             y:{{ avgRun.avgDailyRunKM}}},
