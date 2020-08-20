@@ -253,7 +253,7 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
     $weeksToGo = $immutable->weeksInYear - $i;
     $weeklyKMToRun = $weeklyKMTogo / $weeksToGo;
 
-    $weeklyStats[$i] = array('weekNr' => $i, 'weekLength' => $weekKMTotal);
+    $weeklyStats[$i] = array('weekNr' => $i, 'weekDistance' => $runWeeks[$i]['weekDistance'],'weekLength' => $weekKMTotal);
 
 }
 

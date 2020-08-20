@@ -104,8 +104,19 @@
                         {x:{{ weekStats.weekNr }},
                             y:{{ weekStats.weekLength}}},
                         {% endfor %}
-                    ]
-                }
+                    ],
+					order: 1,
+                },
+				{
+					label: 'Week Distance',
+					data: [{% for weekStats in weeklyStats %}
+                        {x:{{ weekStats.weekNr }},
+                            y:{{ weekStats.weekDistance}}},
+                        {% endfor %}
+						], 
+						type: 'bar',
+						order: 2,
+				}
                 ]
             },
 
