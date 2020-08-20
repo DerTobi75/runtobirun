@@ -96,7 +96,7 @@
             data: {
                 labels: [{% for weeks in weeklyStats %}'{{ weeks.weekNr }}', {% endfor %}],
                 datasets: [{
-                    label: 'Week',
+                    label: 'Week Total',
 					yAxisID: 'A',
                     backgroundColor: 'rgb(255, 0, 0, 0.1)',
                     borderColor: 'rgb(255, 0, 0)',
@@ -106,7 +106,7 @@
                             y:{{ weekStats.weekLength}}},
                         {% endfor %}
                     ],
-					order: 1,
+
                 },
 				{
 					label: 'Week Distance',
@@ -117,7 +117,7 @@
                         {% endfor %}
 						], 
 					type: 'bar',
-					order: 2,
+
 				}
                 ]
             },
