@@ -90,14 +90,23 @@
         var cty = document.getElementById('myWeeklyChart').getContext('2d');
         var chart = new Chart(cty, {
             // The type of chart we want to create
-            type: 'line',
+            type: 'bar',
 
             // The data for our dataset
             data: {
                 labels: [{% for weeks in weeklyStats %}'{{ weeks.weekNr }}', {% endfor %}],
                 datasets: [{
-                    label: 'Week Total',
+					label: 'Week Distance',
 					yAxisID: 'A',
+					data: [{% for weekStats in weeklyStats %}
+                        {x:{{ weekStats.weekNr }},
+                            y:{{ weekStats.weekDistance}}},
+                        {% endfor %}
+						], 
+					order: 1,
+				},{
+                    label: 'Week Total',
+					yAxisID: 'B',
                     backgroundColor: 'rgb(255, 0, 0, 0.1)',
                     borderColor: 'rgb(255, 0, 0)',
                     pointBackgroundColor: 'rgb(255, 0, 0)',
@@ -106,19 +115,9 @@
                             y:{{ weekStats.weekLength}}},
                         {% endfor %}
                     ],
-
-                },
-				{
-					label: 'Week Distance',
-					yAxisID: 'B',
-					data: [{% for weekStats in weeklyStats %}
-                        {x:{{ weekStats.weekNr }},
-                            y:{{ weekStats.weekDistance}}},
-                        {% endfor %}
-						], 
-					type: 'bar',
-
-				}
+					type: 'line',
+					order: 2,
+					},
                 ]
             },
 
