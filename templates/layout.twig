@@ -97,6 +97,7 @@
                 labels: [{% for weeks in weeklyStats %}'{{ weeks.weekNr }}', {% endfor %}],
                 datasets: [{
                     label: 'Week',
+					yAxisID: 'A',
                     backgroundColor: 'rgb(255, 0, 0, 0.1)',
                     borderColor: 'rgb(255, 0, 0)',
                     pointBackgroundColor: 'rgb(255, 0, 0)',
@@ -109,13 +110,14 @@
                 },
 				{
 					label: 'Week Distance',
+					yAxisID: 'B',
 					data: [{% for weekStats in weeklyStats %}
                         {x:{{ weekStats.weekNr }},
                             y:{{ weekStats.weekDistance}}},
                         {% endfor %}
 						], 
-						type: 'bar',
-						order: 2,
+					type: 'bar',
+					order: 2,
 				}
                 ]
             },
@@ -123,6 +125,15 @@
             // Configuration options go here
             options: {
                 scales: {
+					yAxes: [{
+						id: 'A',
+						type: 'linear',
+						position: 'left',
+					}, {
+						id: 'B',
+						type: 'linear',
+						position: 'right',
+					}],
                     xAxes: [{
                         ticks: {
                             min: 1,
