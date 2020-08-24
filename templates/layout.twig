@@ -45,6 +45,8 @@
         backgroundColor: 'rgb(255, 0, 0, 0.1)',
         borderColor: 'rgb(255, 0, 0)',
         pointBackgroundColor: 'rgb(255, 0, 0)',
+	pointBorderColor: 'rgb(255, 255, 255)',
+	pointRadius: 4,
         data: [{% for rStats in rMonData %}
             {x:{{ rStats.day }},
              y:{{ rStats.kmSum}}},
@@ -55,6 +57,8 @@
             backgroundColor: 'rgb(0, 0, 0, 0.1)',
             borderColor: 'rgb(123, 123, 123)',
             pointBackgroundColor: 'rgb(123, 123, 123)',
+	    pointBorderColor: 'rgb(255, 255, 255)',
+	    pointRadius: 4, 
             data: [{% for pStats in pMonData %}
                 {x:{{ pStats.day }},
                  y:{{ pStats.kmSum}}},
@@ -109,6 +113,10 @@
                     backgroundColor: 'rgb(255, 0, 0, 0.1)',
                     borderColor: 'rgb(255, 0, 0)',
                     pointBackgroundColor: 'rgb(255, 0, 0)',
+		    pointBorderColor: 'rgb(255, 255, 255)',
+		    borderWidth: 2,
+		    pointRadius: 3,
+		    pointBorderWidth: 1,
                     data: [{% for weekStats in weeklyStats %}
                             {{ weekStats.weekLength }}, 
                         {% endfor %}
