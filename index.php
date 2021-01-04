@@ -23,7 +23,7 @@ $pageTitle = "Meine Läufe, ...";
 
 // ToDo:
 // Need to get year and month from URL
-$run_year = '2020';
+$run_year = '2021';
 $today = Carbon::today();
 $immutable = CarbonImmutable::createFromDate($run_year, 1, 1);
 $period = CarbonPeriod::create($immutable->firstOfYear(), $immutable);
@@ -78,7 +78,7 @@ $totalGoalKM = 0;
 $diffToGoal = 0;
 // ToDo: get yearlyGoal from the database or set it elsewhere,
 // ToDo: but do not let it be static!
-$yearlyGoal = 2020;
+$yearlyGoal = 2021;
 
 // ToDo: Check if this makes sense!!
 $KMtoGo = $yearlyGoal;
@@ -201,7 +201,16 @@ $weeklyKMTogo = $yearlyGoal;
 $weekYearlyGoal = 0;
 $weeklyGoal = $yearlyGoal / $immutable->weeksInYear;
 $weeklyKMToRun = $weeklyGoal;
-for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
+
+// Quick and Dirty Fix for first Week Problem in 2021!
+// Check also for Statement
+if($run_year == 2021) {
+	$firstWeekNr = 0;
+} else {
+	$firstWeekNr = $immutable->firstOfYear()->week;
+}
+//for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
+for($i = $firstWeekNr; $i < Carbon::today()->week; $i++) {
 
     // Think about this shit again
     $weekYearlyGoal += $weeklyGoal;
@@ -256,7 +265,9 @@ for($i = $immutable->firstOfYear()->week; $i <= Carbon::today()->week; $i++) {
     $weeklyStats[$i] = array('weekNr' => $i, 'weekDistance' => $runWeeks[$i]['weekDistance'],'weekLength' => $weekKMTotal);
 
 }
-
+echo "<pre>";
+print_r($weeklyStats);
+echo "</pre>";
 
 $qSelectRunsInMonth = $pdo->prepare("SELECT * FROM `laeufe` WHERE month(from_unixtime(lauf_datum)) = :month AND year(from_unixtime(lauf_datum)) = :year ORDER BY `lauf_datum`");
 
