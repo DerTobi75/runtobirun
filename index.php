@@ -265,10 +265,6 @@ for($i = $firstWeekNr; $i < Carbon::today()->week; $i++) {
     $weeklyStats[$i] = array('weekNr' => $i, 'weekDistance' => $runWeeks[$i]['weekDistance'],'weekLength' => $weekKMTotal);
 
 }
-echo "<pre>";
-print_r($weeklyStats);
-echo "</pre>";
-
 $qSelectRunsInMonth = $pdo->prepare("SELECT * FROM `laeufe` WHERE month(from_unixtime(lauf_datum)) = :month AND year(from_unixtime(lauf_datum)) = :year ORDER BY `lauf_datum`");
 
 
